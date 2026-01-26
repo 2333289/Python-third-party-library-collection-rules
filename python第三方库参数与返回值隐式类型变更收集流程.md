@@ -272,6 +272,30 @@
   
 - **Key Words**：记录初筛时命中的搜索关键字（如 `type`,`default`, `return` 等）。
 
+- **Changelog Reference ID**：
+
+  - **描述**：记录官方 Changelog 条目末尾引用的 Issue 或 PR 编号
+
+  - **获取方式**：直接复制 Changelog 条目中括号内的编号（例如图示中的 `61916`）
+  - ![image-20260123152157924](../../研究生论文/md/python第三方库参数与返回值隐式类型变更收集流程-use-images/image-20260123152157924.png)
+  - **作用**：作为变更的原始入口索引
+
+- **Implementation Pull Request ID(Files Changed)**
+
+  - **描述**：记录实际包含该变更代码差异（Files changed）的 Pull Request 编号。
+
+  - **获取方式**：
+
+    1. 点击 Changelog Reference ID 的链接进入 GitHub 页面
+
+    2. 如果进入的是一个 Issue 页面（通常左上角显示绿色的 Open 或紫色的 Closed Issue 图标），请查看右侧边栏的 **"Development"** 或 **"Linked pull requests"** 区域
+
+    3. 找到状态为 **Merged**（紫色图标）的号码（例如图示中的 `#62718`），该号码即为 Implementation Pull Request ID
+
+       ![image-20260123152452731](../../研究生论文/md/python第三方库参数与返回值隐式类型变更收集流程-use-images/image-20260123152452731.png)
+
+    4. 注意：如果 Changelog 直接链接到的就是 PR 页面，则此字段与 Changelog Reference ID 相同
+
 
 
 任务分工：
