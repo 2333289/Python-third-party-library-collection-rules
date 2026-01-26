@@ -277,7 +277,7 @@
   - **描述**：记录官方 Changelog 条目末尾引用的 Issue 或 PR 编号
 
   - **获取方式**：直接复制 Changelog 条目中括号内的编号（例如图示中的 `61916`）
-  - ![image-20260123152157924](../../研究生论文/md/python第三方库参数与返回值隐式类型变更收集流程-use-images/image-20260123152157924.png)
+  - ![image-20260123152157924](python第三方库参数与返回值隐式类型变更收集流程-use-images/image-20260123152157924.png)
   - **作用**：作为变更的原始入口索引
 
 - **Implementation Pull Request ID(Files Changed)**
@@ -292,7 +292,7 @@
 
     3. 找到状态为 **Merged**（紫色图标）的号码（例如图示中的 `#62718`），该号码即为 Implementation Pull Request ID
 
-       ![image-20260123152452731](../../研究生论文/md/python第三方库参数与返回值隐式类型变更收集流程-use-images/image-20260123152452731.png)
+       ![image-20260123152452731](python第三方库参数与返回值隐式类型变更收集流程-use-images/image-20260123152452731.png)
 
     4. 注意：如果 Changelog 直接链接到的就是 PR 页面，则此字段与 Changelog Reference ID 相同
 
