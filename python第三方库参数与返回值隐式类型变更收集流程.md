@@ -249,8 +249,6 @@
   
     2、`parameter type change (narrowing)`：停止支持某种类型，或由“接受”转为“报错”。
   
-    3、`parameter domain shift`：参数接受类型的集合发生了替换或实质性重定义。
-  
   - 辅助生成：可将提取的代码片段输入大模型（LLM），提示其分析具体的类型演化逻辑。
   
   - ```提示词
@@ -306,7 +304,6 @@
     # Allowed Categories (Labels)
     1. **parameter type change (widening)**: The API now accepts types that were previously unsupported or caused errors.
     2. **parameter type change (narrowing)**: The API stopped supporting a previously valid type, or now explicitly raises an error (e.g., TypeError/ValueError) for a type that used to be processed.
-    3. **parameter domain shift**: The set of accepted types has been replaced or substantially redefined (e.g., constants replaced by Enums).
     
     # Output Format Rule
     Provide the output in exactly three blocks separated by empty lines. No markdown bolding in the content.
@@ -317,7 +314,7 @@
     
     After change: [Describe the new parameter acceptance state. Focus on the new restrictions, new allowed types, or formalized validation logic.]
     ```
-  
+    
   - 
   
   - 
