@@ -4,11 +4,12 @@
 
 #### 1. 变更日志初筛
 
-- **关键字过滤**：查阅目标库的官方变更文档（Changelog），使用 `type`、`return`、`default` 等关键字进行搜索定位。
-- **语义分析**：阅读变更描述，初步判断该条目是否涉及参数类型（Parameter Type）或返回值类型（Return Value Type）的实质性变更。
+- **关键字过滤**：查阅目标库的官方变更文档（Changelog），使用 `type`、~~return、default~~ 等关键字进行搜索定位。
+- **语义分析**：阅读变更描述，初步判断该条目是否涉及参数类型（Parameter Type）~~或返回值类型（Return Value Type）~~的实质性变更。
   - *排除项*
     - 仅涉及代码重构、单纯增加类型注解、新增参数或删除参数的条目。
     - Bug Fixes 类目：若变更日志将某条目明确归类在 **Bug fixes** 或 **Fixed** 标题下，原则上直接跳过，不再进行后续追踪（聚焦于功能改进或 API 演进中的类型变化）。
+    - 返回值变更排除：即便变更日志提到了返回值类型的变化，若不涉及参数接收范围的改动，则直接跳过。
 
 #### 2. 源码定位与追踪
 
@@ -85,19 +86,22 @@
 - **无类型注解**：发生变更的参数或返回值在源码中**没有类型注解**
 - **纯类型变更判定**：
   - ~~**参数/返回值变更**：确认为参数接受类型范围的变化（如泛化 `str` -> `str | int` 或窄化 `float` -> `int`）或返回值类型的改变。~~
-  - **Default 关键字的特殊判定**：
-    - **不记录**：仅涉及默认值**数值/内容**的变更但类型未变（例如 `default=10` 变为 `default=20`，或 `default="a"` 变为 `default="b"`）。
-    - **记录**：默认值的变更导致了**类型属性**的变化（例如 `default=None` 变为 `default=""`），或者该默认值的改变直接导致函数在未传参时的**返回值类型**发生改变。
-  - **参数类型变更**：**仅当函数/方法对参数的“实际可接收类型范围”发生实质性改变时才予以记录（如从接受 `int` 变为接受 `int | str`，或停止支持某种类型）。** 若变更仅涉及内部处理逻辑的优化，而未改变该参数的准入门槛，则不予考虑。
-  - **返回值类型变更**：确认为返回值物理类型的改变（如 `list` -> `tuple`）。
+  - ~~**Default 关键字的特殊判定**：~~
+    - ~~**不记录**：仅涉及默认值**数值/内容**的变更但类型未变（例如 `default=10` 变为 `default=20`，或 `default="a"` 变为 `default="b"`）。~~
+    - ~~**记录**：默认值的变更导致了**类型属性**的变化（例如 `default=None` 变为 `default=""`），或者该默认值的改变直接导致函数在未传参时的**返回值类型**发生改变。~~
+  - **参数类型变更**：**仅当函数/方法对参数的“实际可接收类型范围”发生实质性改变时才予以记录（如从接受 `int` 变为接受 `int | str`，或停止支持某种类型）。** 若变更仅涉及内部处理逻辑的优化，而未改变该参数的准入门槛，则不予考虑。大致为以下两种情况：
+    - 1、代码变更前可接收某种类型且正常运行，但变更后针对该类型会主动抛出错误（如 `TypeError` 或 `ValueError`。`Warning`的情况也可记录，但需标记出来），限制了输入范围。
+    - 2、变更前后参数可接收的类型集合发生了实质性的不一致（例如从只收 `str` 变为可同时接收 `str | bytes`，或者将原本接收的 `list` 改为仅接收 `ndarray`）。
+  - ~~**返回值类型变更**：确认为返回值物理类型的改变（如 `list` -> `tuple`）。~~
 - **排除项**：
   - ~~**私有方法排除**：不记录以 `_` 开头的私有函数/方法（Private Methods）的变更，除非该变更是通过公共 API 暴露的（见步骤 4 处理）。~~
   - 剔除仅涉及逻辑增强但未改变数据类型的变更。
   - 剔除关键字参数转位置参数、新增/删除 API 等非类型变更情况。
-  - 剔除源码层面属于**“隐式 Bug 修复”**的返回值变更。
+  - 剔除源码层面属于**“隐式 Bug 修复”**的~~返回值~~变更。
   - **剔除那些为了使程序行为符合原始设计意图而进行的修复。** 例如：
     - 修正因逻辑漏洞导致的**类型降级**（如：原本设计应返回 `DataFrame` 但由于 Bug 意外返回了 `Series`，后续修复回 `DataFrame` 的变更）。
     - 修复违反开发者原始设计直觉的异常返回行为。
+  - 返回值变更排除：完全不考虑任何仅涉及返回值变化的条目。
 
 #### 4. 数据录入与文档化
 
@@ -239,11 +243,18 @@
   
     - 
   
-- **Evolution Type**：分类标记为 `parameter type change`（参数类型变更）或 `return type change`（返回值类型变更），并详细解释变更前后的行为差异。
+- **Evolution Type**：分类标记为 `parameter type change`（参数类型变更）~~或 `return type change`（返回值类型变更）~~，并详细解释变更前后的行为差异。初步分为以下三类
+  
+  - 1、`parameter type change (widening)`：参数接受了以前不支持的类型。
+  
+    2、`parameter type change (narrowing)`：停止支持某种类型，或由“接受”转为“报错”。
+  
+    3、`parameter domain shift`：参数接受类型的集合发生了替换或实质性重定义。
   
   - 辅助生成：可将提取的代码片段输入大模型（LLM），提示其分析具体的类型演化逻辑。
   
   - ```提示词
+    # 第一版（弃用）
     # Role: API Evolution Analyst
     You are an expert in analyzing Python library code changes. Your task is to classify the type of API change and describe the semantic shift in the type contract.
     
@@ -278,7 +289,40 @@
   
   - 
   
-- **Key Words**：记录初筛时命中的搜索关键字（如 `type`,`default`, `return` 等）。
+  - ```
+    # Role: API Parameter Evolution Analyst
+    You are an expert in analyzing Python library code changes. Your task is to identify and classify intentional shifts in an API's **parameter type contract**.
+    
+    # Input
+    A code diff (image or text) showing a change in a Python function, along with its Changelog description.
+    
+    # Task
+    Determine if there is a **Parameter Type Change** or an **Implicit Type Validation Change**. 
+    **CRITICAL RULES:**
+    1. **IGNORE ALL RETURN VALUE CHANGES.** If the change only affects the output type or structure, discard it.
+    2. **IGNORE FUNCTIONAL BUG FIXES.** If a type previously failed/errored due to a bug and now works correctly, this is a "fix," not an "evolution." Discard it.
+    3. **FOCUS ON THRESHOLDS.** Only record if the set of "acceptable input types" has been intentionally expanded, restricted, or redefined.
+    
+    # Allowed Categories (Labels)
+    1. **parameter type change (widening)**: The API now accepts types that were previously unsupported or caused errors.
+    2. **parameter type change (narrowing)**: The API stopped supporting a previously valid type, or now explicitly raises an error (e.g., TypeError/ValueError) for a type that used to be processed.
+    3. **parameter domain shift**: The set of accepted types has been replaced or substantially redefined (e.g., constants replaced by Enums).
+    
+    # Output Format Rule
+    Provide the output in exactly three blocks separated by empty lines. No markdown bolding in the content.
+    
+    [Category Label]
+    
+    Before change: [Describe the original parameter acceptance state. Mention what types were accepted and any implicit conversion or loose validation.]
+    
+    After change: [Describe the new parameter acceptance state. Focus on the new restrictions, new allowed types, or formalized validation logic.]
+    ```
+  
+  - 
+  
+  - 
+  
+- **Key Words**：记录初筛时命中的搜索关键字（~~如~~ `type`~~,`default`, `return` 等~~）。
 
 - **Changelog Reference ID**：
 
