@@ -290,12 +290,10 @@
   - **大模型配置要求**：
   
     - 使用 ChatGPT 模型，选择 Thinking 5.4 版本，并开启进阶思考模式。
-  
-    - ![e609d5f7e02923b64389063855e0c3b](C:\Users\d'h'g\Documents\WeChat Files\wxid_0pj768quvqp322\FileStorage\Temp\e609d5f7e02923b64389063855e0c3b.png)
-  
-    - ![28c6d65f4db2056f349f4d4e89e4599](C:\Users\d'h'g\Documents\WeChat Files\wxid_0pj768quvqp322\FileStorage\Temp\28c6d65f4db2056f349f4d4e89e4599.png)
-  
-    - ![105140fb65f413bc790b55447a9dc15](C:\Users\d'h'g\Documents\WeChat Files\wxid_0pj768quvqp322\FileStorage\Temp\105140fb65f413bc790b55447a9dc15.png)
+    - ![e609d5f7e02923b64389063855e0c3b](E:\研究生论文\数据收集规则\python第三方库参数与返回值隐式类型变更收集流程-use-images\e609d5f7e02923b64389063855e0c3b.png)
+    - ![28c6d65f4db2056f349f4d4e89e4599](E:\研究生论文\数据收集规则\python第三方库参数与返回值隐式类型变更收集流程-use-images\28c6d65f4db2056f349f4d4e89e4599.png)
+    - ![105140fb65f413bc790b55447a9dc15](E:\研究生论文\数据收集规则\python第三方库参数与返回值隐式类型变更收集流程-use-images\105140fb65f413bc790b55447a9dc15.png)
+    - 
   
   - 提示词：
   
